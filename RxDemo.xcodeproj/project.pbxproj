@@ -14,6 +14,9 @@
 		347A94A8231E66F10040D78C /* TPEventCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347A94A7231E66F10040D78C /* TPEventCreator.swift */; };
 		347A94AB231E88EE0040D78C /* GeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347A94AA231E88EE0040D78C /* GeneratedMocks.swift */; };
 		347A94AD231F879D0040D78C /* TPEventCreatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347A94AC231F879D0040D78C /* TPEventCreatorTests.swift */; };
+		347A94AF231FD05D0040D78C /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347A94AE231FD05D0040D78C /* EventStore.swift */; };
+		347A94B1231FE5B90040D78C /* TPAuthorizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347A94B0231FE5B90040D78C /* TPAuthorizerTests.swift */; };
+		34AC68252320E80C00F9C482 /* TPErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC68242320E80C00F9C482 /* TPErrorTests.swift */; };
 		34C43E9123107FC600C3B34D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C43E9023107FC600C3B34D /* AppDelegate.swift */; };
 		34C43E9323107FC600C3B34D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C43E9223107FC600C3B34D /* ViewController.swift */; };
 		34C43E9623107FC700C3B34D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34C43E9423107FC700C3B34D /* Main.storyboard */; };
@@ -45,6 +48,9 @@
 		347A94A7231E66F10040D78C /* TPEventCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPEventCreator.swift; sourceTree = "<group>"; };
 		347A94AA231E88EE0040D78C /* GeneratedMocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
 		347A94AC231F879D0040D78C /* TPEventCreatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPEventCreatorTests.swift; sourceTree = "<group>"; };
+		347A94AE231FD05D0040D78C /* EventStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStore.swift; sourceTree = "<group>"; };
+		347A94B0231FE5B90040D78C /* TPAuthorizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPAuthorizerTests.swift; sourceTree = "<group>"; };
+		34AC68242320E80C00F9C482 /* TPErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPErrorTests.swift; sourceTree = "<group>"; };
 		34C43E8D23107FC600C3B34D /* RxDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RxDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34C43E9023107FC600C3B34D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		34C43E9223107FC600C3B34D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -101,6 +107,7 @@
 				347A94A5231E66200040D78C /* TPAuthorizer.swift */,
 				347A94A1231E64470040D78C /* TPEvent.swift */,
 				347A94A7231E66F10040D78C /* TPEventCreator.swift */,
+				347A94AE231FD05D0040D78C /* EventStore.swift */,
 				347A94A3231E65800040D78C /* TPError.swift */,
 			);
 			path = TPEventKit;
@@ -149,6 +156,8 @@
 				347A949E231E633B0040D78C /* TPEventTests.swift */,
 				34C43EAA231080E900C3B34D /* Info.plist */,
 				347A94AC231F879D0040D78C /* TPEventCreatorTests.swift */,
+				347A94B0231FE5B90040D78C /* TPAuthorizerTests.swift */,
+				34AC68242320E80C00F9C482 /* TPErrorTests.swift */,
 			);
 			path = RxDemoTests;
 			sourceTree = "<group>";
@@ -280,7 +289,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Define output file. Change \"${PROJECT_DIR}/${PROJECT_NAME}Tests\" to your test's root source folder, if it's not the default name.\nOUTPUT_FILE=\"${PROJECT_DIR}/${PROJECT_NAME}Tests/GeneratedMocks.swift\"\necho \"Generated Mocks File = ${OUTPUT_FILE}\"\n\n# Define input directory. Change \"${PROJECT_DIR}/${PROJECT_NAME}\" to your project's root source folder, if it's not the default name.\nINPUT_DIR=\"${PROJECT_DIR}/${PROJECT_NAME}\"\necho \"Mocks Input Directory = ${INPUT_DIR}\"\n\n# Generate mock files, include as many input files as you'd like to create mocks for.\n\"${PODS_ROOT}/Cuckoo/run\" generate --testable \"${PROJECT_NAME}\" \\\n--output \"${OUTPUT_FILE}\" \\\n\"${INPUT_DIR}/TPEventKit/TPAuthorizer.swift\" \\\n\"${INPUT_DIR}/TPEventKit/TPEventCreator.swift\"\n# ... and so forth, the last line should never end with a backslash\n";
+			shellScript = "# Define output file. Change \"${PROJECT_DIR}/${PROJECT_NAME}Tests\" to your test's root source folder, if it's not the default name.\nOUTPUT_FILE=\"${PROJECT_DIR}/${PROJECT_NAME}Tests/GeneratedMocks.swift\"\necho \"Generated Mocks File = ${OUTPUT_FILE}\"\n\n# Define input directory. Change \"${PROJECT_DIR}/${PROJECT_NAME}\" to your project's root source folder, if it's not the default name.\nINPUT_DIR=\"${PROJECT_DIR}/${PROJECT_NAME}\"\necho \"Mocks Input Directory = ${INPUT_DIR}\"\n\n# Generate mock files, include as many input files as you'd like to create mocks for.\n\"${PODS_ROOT}/Cuckoo/run\" generate --testable \"${PROJECT_NAME}\" \\\n--output \"${OUTPUT_FILE}\" \\\n\"${INPUT_DIR}/TPEventKit/TPAuthorizer.swift\" \\\n\"${INPUT_DIR}/TPEventKit/TPEventCreator.swift\" \\\n\"${INPUT_DIR}/TPEventKit/EventStore.swift\" \\\n# ... and so forth, the last line should never end with a backslash\n";
 		};
 		5F5DF5469BCF363130CB69E2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -389,6 +398,7 @@
 			files = (
 				347A94A6231E66200040D78C /* TPAuthorizer.swift in Sources */,
 				34C43E9323107FC600C3B34D /* ViewController.swift in Sources */,
+				347A94AF231FD05D0040D78C /* EventStore.swift in Sources */,
 				34C43E9123107FC600C3B34D /* AppDelegate.swift in Sources */,
 				347A94A4231E65800040D78C /* TPError.swift in Sources */,
 				347A94A8231E66F10040D78C /* TPEventCreator.swift in Sources */,
@@ -401,9 +411,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				347A94B1231FE5B90040D78C /* TPAuthorizerTests.swift in Sources */,
 				347A949F231E633B0040D78C /* TPEventTests.swift in Sources */,
 				347A94AD231F879D0040D78C /* TPEventCreatorTests.swift in Sources */,
 				347A94AB231E88EE0040D78C /* GeneratedMocks.swift in Sources */,
+				34AC68252320E80C00F9C482 /* TPErrorTests.swift in Sources */,
 				34C43EA9231080E900C3B34D /* TPEventKitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

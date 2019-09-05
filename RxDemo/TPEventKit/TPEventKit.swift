@@ -11,12 +11,12 @@ import EventKit
 import RxSwift
 
 class TPEventKit {
-    let eventStore: EKEventStore
+    let eventStore: EventStore
     private let authorizer: TPAuthorizer
     private let eventCreator: TPEventCreator
     
     init(
-        eventStore: EKEventStore = EKEventStore(),
+        eventStore: EventStore = EKEventStore(),
         authorizer: TPAuthorizer = TPEKAuthorizer(),
         eventCreator: TPEventCreator = TPEKEventCreator()
     ) {

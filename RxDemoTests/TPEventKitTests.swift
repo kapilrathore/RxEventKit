@@ -15,13 +15,13 @@ import Cuckoo
 
 @testable import RxDemo
 
-class RxDemoTests: XCTestCase {
+class TPEventKitTests: XCTestCase {
     var observer: TestableObserver<TPEvent>!
     var disposeBag: DisposeBag!
     
     var tpEvent: TPEvent!
     
-    var tpEventStore: EKEventStore!
+    var tpEventStore: EventStore!
     var mockAuthorizer: MockTPAuthorizer!
     var mockEventCreator: MockTPEventCreator!
     var tpEventKit: TPEventKit!
@@ -124,6 +124,11 @@ class RxDemoTests: XCTestCase {
     
     // Valid Event -> Permission Granted -> Event Successfully Saved
     func test_RequestPermission_Granted_SaveEvent_Success() {
+        // Setup
+        tpEvent.notes = "Test notes"
+        tpEvent.url = URL(string: "https://www.google.com/")
+        tpEvent.location = TPEvent.Location(name: "TestLocation", coordinates: (latitude: 11.76, longitude: 53.92))
+        
         // Mock
         stub(mockAuthorizer) { (authStub) in
             when(authStub.checkAuthorizationStatus(match(tpEventStore)))
@@ -146,12 +151,11 @@ class RxDemoTests: XCTestCase {
         XCTAssertEqual(observer.events, expectedEvents)
     }
     
-    
     func match(_ value: TPEvent) -> ParameterMatcher<TPEvent> {
         return Cuckoo.equal(to: value, equalWhen: { $0.self == $1.self })
     }
     
-    func match(_ value: EKEventStore) -> ParameterMatcher<EKEventStore> {
-        return Cuckoo.equal(to: value, equalWhen: { $0 === $1 })
+    func match(_ value: EventStore) -> ParameterMatcher<EventStore> {
+        return Cuckoo.equal(to: value, equalWhen: { $0.defaultCalendar == $1.defaultCalendar })
     }
 }

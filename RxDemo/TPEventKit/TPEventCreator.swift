@@ -11,24 +11,19 @@ import RxSwift
 import EventKit
 
 protocol TPEventCreator {
-    func createCalendarEvent(_ event: TPEvent, _ eventStore: EKEventStore) -> Observable<TPEvent>
-}
-
-protocol MockEventStore {
-    func save(_ event: EKEvent) -> Bool
+    func createCalendarEvent(_ event: TPEvent, _ eventStore: EventStore) -> Observable<TPEvent>
 }
 
 class TPEKEventCreator: TPEventCreator {
-    func createCalendarEvent(_ event: TPEvent, _ eventStore: EKEventStore) -> Observable<TPEvent> {
+    func createCalendarEvent(_ event: TPEvent, _ eventStore: EventStore) -> Observable<TPEvent> {
         return Observable<TPEvent>.create { (observer) -> Disposable in
             let disposables = Disposables.create()
             
-            let newEvent = self.getEKEvent(from: event, eventStore)
-            
             do {
-                try eventStore.save(newEvent, span: .thisEvent)
+                try eventStore.save(event)
                 observer.onNext(event)
             } catch let error {
+                print("\n\nError on save \(error.localizedDescription)")
                 observer.onError(TPError.errorOnSave(reason: error.localizedDescription))
             }
             
@@ -36,28 +31,5 @@ class TPEKEventCreator: TPEventCreator {
             
             return disposables
         }
-    }
-    
-    private func getEKEvent(from event: TPEvent, _ eventStore: EKEventStore) -> EKEvent {
-        let newEvent = EKEvent(eventStore: eventStore)
-        newEvent.calendar = eventStore.defaultCalendarForNewEvents
-        
-        newEvent.title = event.title
-        newEvent.startDate = event.startDate
-        newEvent.endDate = event.endDate
-        newEvent.notes = event.notes
-        newEvent.url = event.url
-        
-        if let eventLocation = event.location {
-            let location = EKStructuredLocation()
-            location.title = eventLocation.name
-            location.geoLocation = CLLocation(
-                latitude: eventLocation.coordinates.latitude,
-                longitude: eventLocation.coordinates.longitude
-            )
-            newEvent.structuredLocation = location
-        }
-        
-        return newEvent
     }
 }

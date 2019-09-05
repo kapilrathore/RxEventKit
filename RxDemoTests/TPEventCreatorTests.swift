@@ -9,6 +9,7 @@
 import XCTest
 import RxSwift
 import RxTest
+import Cuckoo
 import EventKit
 @testable import RxDemo
 
@@ -19,7 +20,7 @@ class TPEventCreatorTests: XCTestCase {
     var eventCreator: TPEKEventCreator!
     var tpEvent: TPEvent!
     
-    var eventStore: EKEventStore! = MockEventStore()
+    var eventStore: MockEventStore!
 
     override func setUp() {
         observer = TestScheduler(initialClock: 0)
@@ -27,13 +28,14 @@ class TPEventCreatorTests: XCTestCase {
         disposeBag = DisposeBag()
         
         eventCreator = TPEKEventCreator()
+        eventStore = MockEventStore()
         
         tpEvent = TPEvent(title: "Test Event")
         tpEvent.startDate = Date().addingTimeInterval(10)
         tpEvent.endDate = Date().addingTimeInterval(20)
     }
     
-    private func createBinding(_ event: TPEvent, _ store: EKEventStore) {
+    private func createBinding(_ event: TPEvent, _ store: EventStore) {
         eventCreator.createCalendarEvent(event, store)
             .subscribe(observer)
             .disposed(by: disposeBag)
@@ -44,20 +46,34 @@ class TPEventCreatorTests: XCTestCase {
     }
     
     func test_create_calendar_event_error() {
+        // Setup
+        let errorOnSave = TPError.invalidEvent
         
-        createBinding(tpEvent, <#T##store: EKEventStore##EKEventStore#>)
+        // Mock
+        stub(eventStore) { (storeStub) in
+            when(storeStub.save(match(tpEvent)))
+                .thenThrow(errorOnSave)
+        }
+        
+        // Act
+        createBinding(tpEvent, eventStore)
         
         // Assert
         let expectedEvents: [Recorded<Event<TPEvent>>] = [
-            Recorded.error(0, TPError.errorOnSave(reason: "Error Reason"))
+            Recorded.error(0, TPError.errorOnSave(reason: errorOnSave.localizedDescription))
         ]
         XCTAssertEqual(observer.events, expectedEvents)
     }
     
     func test_create_calendar_event_success() {
-        eventCreator.createCalendarEvent(tpEvent, eventStore)
-            .subscribe(observer)
-            .disposed(by: disposeBag)
+        // Mock
+        stub(eventStore) { (storeStub) in
+            when(storeStub.save(match(tpEvent)))
+                .thenDoNothing()
+        }
+        
+        // Act
+        createBinding(tpEvent, eventStore)
         
         // Assert
         let expectedEvents: [Recorded<Event<TPEvent>>] = [
@@ -66,23 +82,8 @@ class TPEventCreatorTests: XCTestCase {
         ]
         XCTAssertEqual(observer.events, expectedEvents)
     }
-
-    func test_getEKEvent_from_TPEvent() {
-        generateTPEvent()
-    }
     
-    private func generateTPEvent() {
-        tpEvent = TPEvent(title: "Test Event Title")
-        tpEvent.startDate = Date().addingTimeInterval(10)
-        tpEvent.endDate = Date().addingTimeInterval(10)
-        tpEvent.notes = "Test notes"
-        tpEvent.url = URL(string: "https://www.google.com/")
-        tpEvent.location = TPEvent.Location(name: "Test Location", coordinates: (latitude: 5.5, longitude: 7.5))
-    }
-}
-
-class MockEventStore: EKEventStore {
-    override func save(_ event: EKEvent, span: EKSpan) throws {
-        
+    func match(_ value: TPEvent) -> ParameterMatcher<TPEvent> {
+        return Cuckoo.equal(to: value, equalWhen: { $0.self == $1.self })
     }
 }
